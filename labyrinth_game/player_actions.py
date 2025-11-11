@@ -157,7 +157,7 @@ def use_item(game_state, item_name):
         case 'sword':
             print("Чувствуете уверенность в своих силах. Оружие придаёт вам решимости.")
         
-        case 'bronze box':
+        case 'bronze_box':
             print("Вы открываете бронзовую шкатулку...")
             # Проверяем, есть ли уже ржавый ключ в инвентаре
             if 'rusty_key' not in player_inventory:
