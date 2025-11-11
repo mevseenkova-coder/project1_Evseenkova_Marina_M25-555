@@ -1,9 +1,71 @@
 #!/usr/bin/env python3
 
 # from constants import ROOMS
-from player_actions import get_input, show_inventory
+from player_actions import get_input, move_player, show_inventory, take_item, use_item
 from utils import describe_current_room
 
+
+def process_command(game_state, command):
+    """
+    Функция process_command должна принимать game_state и введенную пользователем строку
+    Внутри нее разделите строку на части, чтобы отделить команду от аргумента 
+    (например, 'go north' -> 'go', 'north').
+    Используя match / case, определите, какую команду ввел пользователь (look, use, go, 
+    take, inventory, quit).
+    Вызовите соответствующую функцию (describe_current_room, move_player, take_item 
+    и т.д.) в рамках условия, передав ей нужный аргумент.
+    В цикле while в функции main() вызывайте process_command для каждой введенной 
+    пользователем строки. Убедитесь, что команда quit или exit завершает игру.
+    
+    Обрабатывает введенную пользователем команду.
+    
+    Args:
+        game_state (dict): Текущее состояние игры
+        command (str): Введенная пользователем команда
+    """
+    # Разделяем команду на части (команда + аргумент)
+    parts = command.strip().lower().split()
+    if not parts:
+        return  # Пустая команда — ничего не делаем
+    
+    action = parts[0]  # команда
+    argument = parts[1] if len(parts) > 1 else None  # аргумент
+    
+    # Обрабатываем команды через match/case
+    match action:
+        case 'look':
+            describe_current_room(game_state)
+
+        case 'use':
+            if argument:
+                use_item(game_state, argument)
+            else:
+                print("Укажите, какой предмет хотите использовать.")
+       
+        case 'go':
+            if argument:
+                move_player(game_state, argument)
+            else:
+                print("Укажите направление движения (north, south, east, west).")
+        
+        case 'take':
+            if argument:
+                take_item(game_state, argument)
+            else:
+                print("Укажите, какой предмет хотите взять.")
+                
+        case 'inventory' | 'inv':
+            show_inventory(game_state)
+        
+        case 'quit' | 'exit':
+            print("Игра завершена. До свидания!")
+            game_state['game_over'] = not game_state['game_over']
+            return 'quit'  # Специальный сигнал для выхода
+        
+        case _:
+            print(f"Неизвестная команда: '{action}'. Попробуйте: look, use, go, take, inventory, quit.")  # noqa: E501
+    
+    return None  # Нормальное продолжение игры
 
 def main():
     """
@@ -34,13 +96,7 @@ def main():
     # Игровой цикл
     while not game_state['game_over']:
         command = get_input(prompt="> ")
-        if command == "осмотреть":
-            describe_current_room(game_state)
-        elif command == "инвентарь":
-            show_inventory(game_state)
-    # ... другие команды
-        game_state['game_over'] = not game_state['game_over']
-
-
+        process_command(game_state, command)
+        
 if __name__ == "__main__":
     main()
