@@ -2,7 +2,7 @@
 
 # from constants import ROOMS
 from player_actions import get_input, move_player, show_inventory, take_item, use_item
-from utils import describe_current_room
+from utils import attempt_open_treasure, describe_current_room, solve_puzzle
 
 
 def process_command(game_state, command):
@@ -56,10 +56,16 @@ def process_command(game_state, command):
                 
         case 'inventory' | 'inv':
             show_inventory(game_state)
+
+        case 'solve':
+            if game_state['current_room'] == 'treasure_room':
+                attempt_open_treasure(game_state)
+            else:
+                solve_puzzle(game_state)
         
         case 'quit' | 'exit':
             print("Игра завершена. До свидания!")
-            game_state['game_over'] = not game_state['game_over']
+            game_state['game_over'] = True
             return 'quit'  # Специальный сигнал для выхода
         
         case _:

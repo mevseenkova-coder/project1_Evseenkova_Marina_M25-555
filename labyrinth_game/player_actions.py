@@ -111,14 +111,17 @@ def take_item(game_state, item_name):
 
     # Проверяем, есть ли предмет в комнате
     if item_name in room_data['items']:
-        # Добавляем предмет в инвентарь игрока
-        player_inventory.append(item_name)
+        if item_name == 'treasure_chest':
+            print("Вы не можете поднять сундук, он слишком тяжелый.")
+        else:
+            # Добавляем предмет в инвентарь игрока
+            player_inventory.append(item_name)
         
-        # Удаляем предмет из списка предметов комнаты
-        room_data['items'].remove(item_name)
+            # Удаляем предмет из списка предметов комнаты
+            room_data['items'].remove(item_name)
         
-        # Выводим сообщение о том, что игрок подобрал предмет
-        print(f"Вы подняли: {item_name}")
+            # Выводим сообщение о том, что игрок подобрал предмет
+            print(f"Вы подняли: {item_name}")
     else:
         # Если предмета нет в комнате, выводим сообщение
         print("Такого предмета здесь нет.")
