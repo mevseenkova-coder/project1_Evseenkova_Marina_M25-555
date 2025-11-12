@@ -2,7 +2,7 @@
 
 # from constants import ROOMS
 from player_actions import get_input, move_player, show_inventory, take_item, use_item
-from utils import attempt_open_treasure, describe_current_room, solve_puzzle
+from utils import attempt_open_treasure, describe_current_room, show_help, solve_puzzle
 
 
 def process_command(game_state, command):
@@ -33,6 +33,9 @@ def process_command(game_state, command):
     
     # Обрабатываем команды через match/case
     match action:
+        case 'help':
+            show_help()
+
         case 'look':
             describe_current_room(game_state)
 
