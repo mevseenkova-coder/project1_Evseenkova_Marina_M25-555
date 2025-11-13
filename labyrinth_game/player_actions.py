@@ -1,7 +1,7 @@
 # labyrinth_game/player_actions.py
 
 from constants import ROOMS  # предполагаем, что ROOMS находится в модуле constants
-from utils import describe_current_room
+from utils import describe_current_room, random_event
 
 
 def show_inventory(game_state):
@@ -81,6 +81,9 @@ def move_player(game_state, direction):
 
         # Выводим описание новой комнаты
         describe_current_room(game_state)
+
+        # Вызываем случайное событие после перемещения
+        random_event(game_state)
         
         return True
     else:
