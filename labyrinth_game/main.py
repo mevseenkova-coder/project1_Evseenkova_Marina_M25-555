@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# from constants import ROOMS
+from constants import COMMANDS
 from player_actions import get_input, move_player, show_inventory, take_item, use_item
 from utils import attempt_open_treasure, describe_current_room, show_help, solve_puzzle
 
@@ -16,6 +16,11 @@ def process_command(game_state, command):
     и т.д.) в рамках условия, передав ей нужный аргумент.
     В цикле while в функции main() вызывайте process_command для каждой введенной 
     пользователем строки. Убедитесь, что команда quit или exit завершает игру.
+
+    Реализуйте возможность движения по односложным командам (north, south и т.д.) 
+    без слова go.
+    Если игрок находится в treasure_room и вводит команду solve, вместо solve_puzzle() 
+    должна вызываться attempt_open_treasure().
     
     Обрабатывает введенную пользователем команду.
     
@@ -34,7 +39,7 @@ def process_command(game_state, command):
     # Обрабатываем команды через match/case
     match action:
         case 'help':
-            show_help()
+            show_help(COMMANDS)
 
         case 'look':
             describe_current_room(game_state)
@@ -50,6 +55,9 @@ def process_command(game_state, command):
                 move_player(game_state, argument)
             else:
                 print("Укажите направление движения (north, south, east, west).")
+
+        case 'north' | 'south' | 'east' | 'west':
+            move_player(game_state, action)
         
         case 'take':
             if argument:

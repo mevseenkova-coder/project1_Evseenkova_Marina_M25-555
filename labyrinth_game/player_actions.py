@@ -45,6 +45,7 @@ def get_input(prompt="> "):
         print("\nВыход из игры.")
         return "quit" 
 
+
 def move_player(game_state, direction):
     """
     Функция должна принимать два аргумента — game_state и направление (строку, 
@@ -55,12 +56,20 @@ def move_player(game_state, direction):
     Увеличьте шаг на единицу.
     Выведите описание новой комнаты.
     Если выхода нет, выведите на экран сообщение: "Нельзя пойти в этом направлении."
+
+    Сделать проверку, если пользователь переходит в следующую комнату, а она 
+    treasure_room, то нужно делать проверку на наличие ключа 'rusty_key' в инвентаре.
+    Если ключ есть, то вывести сообщение: "Вы используете найденный ключ, чтобы открыть 
+    путь в комнату сокровищ." и перевести пользователя в комнату treasure_room
+    В противном случае вывести сообщение вывести сообщение: 
+    "Дверь заперта. Нужен ключ, чтобы пройти дальше."
     
     Перемещает игрока в указанном направлении, если выход существует.
 
     Args:
         game_state (dict): Текущее состояние игры. Должен содержать ключи:
             - 'current_room' (dict): текущая комната,должна содержать ключ 'exits'(dict)
+            - 'player_inventory' (list): инвентарь игрока
             - 'steps_taken' (int): количество шагов, пройденное в игре
         direction (str): Направление движения (например, 'north').
 
@@ -70,11 +79,22 @@ def move_player(game_state, direction):
     room_name = game_state['current_room']  # название текущей комнаты
     room_data = ROOMS[room_name]  # данные о текущей комнате
     room_exits = room_data.get('exits', [])   # Доступные выходы
-   
+    player_inventory = game_state['player_inventory']  # инвентарь игрока
+       
     # Проверяем, существует ли выход в этом направлении
     if direction in room_exits:
+        # Определяем следующую комнату
+        next_room = room_exits[direction]
+        if next_room == 'treasure_room':
+            # Проверяем, есть ли ключ в инвентаре
+            if 'rusty_key' not in player_inventory:
+                print("Дверь заперта. Нужен ключ, чтобы пройти дальше.")
+                return False
+            else:
+                print("Вы используете найденный ключ, чтобы открыть путь в комнату сокровищ.")  # noqa: E501
+  
         # Обновляем текущую комнату
-        game_state['current_room'] = room_exits[direction]
+        game_state['current_room'] = next_room
         
         # Увеличиваем счётчик шагов
         game_state['steps_taken'] += 1
@@ -89,6 +109,7 @@ def move_player(game_state, direction):
     else:
         print("Нельзя пойти в этом направлении.")
         return False
+
 
 def take_item(game_state, item_name):
     """
@@ -128,6 +149,7 @@ def take_item(game_state, item_name):
     else:
         # Если предмета нет в комнате, выводим сообщение
         print("Такого предмета здесь нет.")
+
 
 def use_item(game_state, item_name):
     """

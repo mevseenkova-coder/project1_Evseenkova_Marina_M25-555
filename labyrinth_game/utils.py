@@ -50,16 +50,18 @@ def pseudo_random(seed, modulo):
     return int(scaled_value)
 
 
-def show_help():
-    print("\nДоступные команды:")
-    print("  go <direction>  - перейти в направлении (north/south/east/west)")
-    print("  look            - осмотреть текущую комнату")
-    print("  take <item>     - поднять предмет")
-    print("  use <item>      - использовать предмет из инвентаря")
-    print("  inventory       - показать инвентарь")
-    print("  solve           - попытаться решить загадку в комнате")
-    print("  quit            - выйти из игры")
-    print("  help            - показать это сообщение") 
+def show_help(commands):
+    """
+    Выводит список доступных команд с описанием.
+    
+    Параметры:
+    commands (dict) — словарь команд и их описаний
+    """
+    print("\nДоступные команды:\n")
+        
+    for command, description in commands.items():
+        # Форматируем строку: команда слева, описание справа с отступом 16 пробелов
+        print(f"{command:<16} {description}")
 
 
 def describe_current_room(game_state):
@@ -122,6 +124,11 @@ def solve_puzzle(game_state):
     Добавьте игроку награду.
     Если ответ неверный, сообщите об этом игроку("Неверно. Попробуйте снова.").
 
+    Добавьте в логику проверки ответа возможность принимать альтернативные варианты 
+    (например, для ответа '10' принимать также 'десять').
+    Проверьте, что сделали награду за решение загадки зависимой от комнаты.
+    Если игрок дает неверный ответ в trap_room, вызовите функцию trigger_trap().
+
     Позволяет игроку решить загадку в текущей комнате.
     
     Args:
@@ -146,8 +153,35 @@ def solve_puzzle(game_state):
     print(question)
     
     # Получаем ответ от пользователя
-    user_answer = input("Ваш ответ: ").strip().lower()
+    user_answer = input("Ваш ответ: ")
     
+    # Принимаем альтернативные варианты ответа
+    match user_answer:
+        case 'zero' | 'ноль':
+            user_answer = '0'
+        case 'one' | 'один':
+            user_answer = '1'
+        case 'two' | 'два':
+            user_answer = '2'        
+        case 'three' | 'три':
+            user_answer = '3'        
+        case 'four' | 'четыре':
+            user_answer = '4'        
+        case 'five' | 'пять':
+            user_answer = '5'        
+        case 'six' | 'шесть':
+            user_answer = '6'        
+        case 'seven' | 'семь':
+            user_answer = '7'        
+        case 'eight' | 'восемь':
+            user_answer = '8'        
+        case 'nine' | 'девять':
+            user_answer = '9'
+        case 'ten' | 'десять':
+            user_answer = '10'
+        case _:
+            user_answer = user_answer.strip().lower()
+
     # Сравниваем ответ с правильным (без учёта регистра)
     if user_answer == answer.lower():
         print("Правильно! Вы успешно разгадали загадку.")
@@ -160,6 +194,8 @@ def solve_puzzle(game_state):
             game_state['player_inventory'].append(reward)
             print(f"Вы получили награду: {reward}")
     else:
+        if current_room == 'trap_room':
+            trigger_trap(game_state)
         print("Неверно. Попробуйте снова.")
 
 
