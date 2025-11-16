@@ -135,6 +135,7 @@ def solve_puzzle(game_state):
         game_state (dict): Текущее состояние игры. Должен содержать ключи:
             - 'current_room' (dict): текущая комната с ключом 'puzzle' (опционально)
             - 'player_inventory' (list): инвентарь игрока
+            - 'game_over' (bool): флаг окончания игры
     """
     current_room = game_state['current_room']  # название текущей комнаты
     room_data = ROOMS[current_room]  # данные о текущей комнате
@@ -196,7 +197,8 @@ def solve_puzzle(game_state):
     else:
         if current_room == 'trap_room':
             trigger_trap(game_state)
-        print("Неверно. Попробуйте снова.")
+        if not game_state['game_over']:      
+            print("Неверно. Попробуйте снова.")
 
 
 def attempt_open_treasure(game_state):
