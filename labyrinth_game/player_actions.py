@@ -1,7 +1,7 @@
 # labyrinth_game/player_actions.py
 
-from constants import ROOMS  # предполагаем, что ROOMS находится в модуле constants
-from utils import describe_current_room, random_event
+from labyrinth_game.constants import ROOMS
+from labyrinth_game.utils import describe_current_room, random_event
 
 
 def show_inventory(game_state):

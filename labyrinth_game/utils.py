@@ -2,7 +2,7 @@
 
 import math
 
-from constants import ROOMS  # предполагаем, что ROOMS находится в модуле constants
+from labyrinth_game.constants import ROOMS
 
 
 def pseudo_random(seed, modulo):

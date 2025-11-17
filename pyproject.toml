@@ -20,6 +20,9 @@ packages = [
 [tool.poetry.scripts]
 project = "labyrinth_game.main:main" 
 
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.14.4"
+
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"

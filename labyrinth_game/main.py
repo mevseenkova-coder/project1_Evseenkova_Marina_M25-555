@@ -1,8 +1,19 @@
 #!/usr/bin/env python3
 
-from constants import COMMANDS
-from player_actions import get_input, move_player, show_inventory, take_item, use_item
-from utils import attempt_open_treasure, describe_current_room, show_help, solve_puzzle
+from labyrinth_game.constants import COMMANDS
+from labyrinth_game.player_actions import (
+    get_input,
+    move_player,
+    show_inventory,
+    take_item,
+    use_item,
+)
+from labyrinth_game.utils import (
+    attempt_open_treasure,
+    describe_current_room,
+    show_help,
+    solve_puzzle,
+)
 
 
 def process_command(game_state, command):
